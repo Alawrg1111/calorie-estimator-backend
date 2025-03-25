@@ -25,18 +25,21 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.post('/analyze', upload.single('photo'), async (req, res) => {
-  try {
-    console.log("📥 Received a request to /analyze");
-    console.log("📝 Description:", req.body.description);
-    console.log("📸 File:", req.file);
+  console.log("📥 Received a request to /analyze");
+  console.log("📝 Description:", req.body.description);
+  console.log("📸 File:", req.file);
+  
+  const file = req.file;
+  const description = req.body.description;
 
-    const file = req.file;
-    const description = req.body.description;
+  if (!file || !description) {
+    console.log("🚫 Missing file or description.");
+    return res.status(400).json({ error: 'Image or description missing.' });
+  }
 
-    if (!file || !description) {
-      console.log("🚫 Missing file or description.");
-      return res.status(400).json({ error: 'Image or description missing.' });
-    }
+  // GPT logic here...
+});
+
 
     // The rest of your code...
 
