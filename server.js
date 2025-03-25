@@ -26,12 +26,19 @@ const upload = multer({ storage });
 
 app.post('/analyze', upload.single('photo'), async (req, res) => {
   try {
+    console.log("📥 Received a request to /analyze");
+    console.log("📝 Description:", req.body.description);
+    console.log("📸 File:", req.file);
+
     const file = req.file;
     const description = req.body.description;
 
     if (!file || !description) {
+      console.log("🚫 Missing file or description.");
       return res.status(400).json({ error: 'Image or description missing.' });
     }
+
+    // The rest of your code...
 
     const base64Image = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
 
