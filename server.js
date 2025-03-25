@@ -11,7 +11,14 @@ const port = process.env.PORT || 5000;
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Enable CORS so your frontend can connect
-app.use(cors());
+const corsOptions = {
+    origin: 'https://calorie-estimator-frontend.vercel.app',
+    methods: ['POST'],
+    credentials: false
+  };
+  
+  app.use(cors(corsOptions));
+  
 
 // Multer config: store uploads in memory
 const storage = multer.memoryStorage();
