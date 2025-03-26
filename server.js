@@ -32,12 +32,13 @@ const upload = multer({ storage });
 // POST route for analyzing the meal
 app.post('/analyze', upload.single('photo'), async (req, res) => {
   console.log("📥 Received a request to /analyze");
+  console.log("📝 Description:", req.body.description);
+
+  // Log the file to check if it is being processed by Multer
+  console.log("📸 File:", req.file ? req.file : "No file received");
 
   const file = req.file;
   const description = req.body.description;
-
-  console.log("📝 Description:", description);
-  console.log("📸 File:", file);
 
   if (!file || !description) {
     console.log("🚫 Missing file or description.");
@@ -45,6 +46,7 @@ app.post('/analyze', upload.single('photo'), async (req, res) => {
   }
 
   try {
+    // Check the data being sent to OpenAI
     console.log("🧠 Sending request to OpenAI...");
 
     const response = await openai.chat.completions.create({
@@ -67,6 +69,7 @@ app.post('/analyze', upload.single('photo'), async (req, res) => {
     res.status(500).json({ error: 'Something went wrong.' });
   }
 });
+
 
 // Start the server
 app.listen(port, () => {
