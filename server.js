@@ -32,6 +32,8 @@ const upload = multer({ storage });
 // POST route for analyzing the meal
 app.post('/analyze', upload.single('photo'), async (req, res) => {
   console.log("📥 Received a request to /analyze");
+  console.log("📝 Description:", req.body.description);
+  console.log("📸 File:", req.file ? req.file : "No file received");
 
   const file = req.file;
   const description = req.body.description;
@@ -42,17 +44,12 @@ app.post('/analyze', upload.single('photo'), async (req, res) => {
   }
 
   try {
-    // Call OpenAI API to analyze the image and description
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4-vision-preview',
-      messages: [
-        {
-          role: 'user',
-          content: `Analyze this meal. Description: ${description}`,
-        },
-        { type: 'image', image: file.buffer.toString('base64') }
-      ]
-    });
+    // Send to OpenAI...
+  } catch (err) {
+    console.error("🚫 Error:", err);
+    res.status(500).json({ error: 'Something went wrong.' });
+  }
+});
 
     console.log("📝 OpenAI response:", response);
 
